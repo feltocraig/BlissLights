@@ -1,0 +1,12 @@
+# The original company's copyrighted app, decompiled code and firmware. Never commit these.
+*.apk
+*.bin
+apk_unzipped/
+decompiled/
+tools/
+
+# Local environment
+.venv/
+__pycache__/
+*.pyc
+.DS_Store

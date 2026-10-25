@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sky Lite Remote</title>
+  <meta name="description" content="Control a BlissLights Sky Lite galaxy projector over Bluetooth, no app install needed.">
+  <meta name="theme-color" content="#070914">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand">
+      <img src="icons/icon.svg" alt="" width="28" height="28">
+      <span>Sky Lite Remote</span>
+    </div>
+    <span id="pill" class="pill" data-state="idle">Not connected</span>
+  </header>
+
+  <main>
+    <!-- Connect -->
+    <section id="connectView" class="card hero">
+      <h1>Your galaxy, back in your hands.</h1>
+      <p class="lede">Turn the projector on, keep your phone or computer nearby, and tap connect.</p>
+      <button id="connectBtn" class="btn primary big">Connect to projector</button>
+      <p id="connectStatus" class="status" role="status" aria-live="polite"></p>
+      <div id="progress" class="progress" hidden><div></div></div>
+      <p class="hint">Not showing up? Hold the projector's power button until it flashes 6 times, then try again.
+        <button id="showAllBtn" class="link">Show all Bluetooth devices</button></p>
+      <div id="unsupported" class="notice" hidden></div>
+    </section>
+
+    <!-- Controls -->
+    <section id="controlView" hidden>
+      <div class="card now">
+        <div>
+          <div class="eyebrow">Now playing</div>
+          <div id="nowName" class="now-name">—</div>
+        </div>
+        <button id="powerBtn" class="power" aria-label="Power">
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M12 3v9" /><path d="M6.3 6.8a8 8 0 1 0 11.4 0" /></svg>
+        </button>
+      </div>
+
+      <h2>Effects</h2>
+      <div id="effects" class="effects"></div>
+
+      <div class="card">
+        <div class="row">
+          <div><div class="label">Rotation</div><div class="sub">Slowly turns the nebula</div></div>
+          <label class="switch"><input type="checkbox" id="rotation"><span></span></label>
+        </div>
+        <div class="row">
+          <div class="label">Brightness</div>
+          <div class="seg" id="brightness" role="radiogroup" aria-label="Brightness">
+            <button data-v="1" role="radio">Low</button><button data-v="2" role="radio">Med</button><button data-v="3" role="radio">High</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>Custom</h2>
+      <div class="card">
+        <div class="row">
+          <div><div class="label">Nebula colour</div><div class="sub">Mix red, green and blue</div></div>
+          <div class="mix"><span id="mixSwatch" class="swatch"></span></div>
+        </div>
+        <div class="chips">
+          <button class="chip" data-ch="red" aria-pressed="false"><i style="--c:#ff4d5e"></i>Red</button>
+          <button class="chip" data-ch="green" aria-pressed="false"><i style="--c:#3ddc84"></i>Green</button>
+          <button class="chip" data-ch="blue" aria-pressed="false"><i style="--c:#4d7cff"></i>Blue</button>
+        </div>
+        <div class="row">
+          <div><div class="label">Laser stars</div></div>
+          <label class="switch"><input type="checkbox" id="laser"><span></span></label>
+        </div>
+        <div class="row">
+          <div><div class="label">Fading</div><div class="sub">Breathe the nebula in and out</div></div>
+          <label class="switch"><input type="checkbox" id="fade"><span></span></label>
+        </div>
+      </div>
+
+      <h2>Timers</h2>
+      <div class="card">
+        <div class="row">
+          <div><div class="label">Turn off after</div></div>
+          <select id="offTimer" class="select"></select>
+        </div>
+        <div class="row">
+          <div><div class="label">Cycle through effects</div><div class="sub">Plays every effect in turn</div></div>
+          <select id="cycle" class="select">
+            <option value="0">Off</option><option value="1">Every 10 s</option><option value="2">Every 20 s</option>
+            <option value="3">Every 30 s</option><option value="6">Every minute</option><option value="12">Every 2 minutes</option>
+          </select>
+        </div>
+      </div>
+
+      <details class="card advanced">
+        <summary>Device info &amp; advanced</summary>
+        <dl id="info" class="info"></dl>
+        <div class="row raw">
+          <input id="rawInput" class="input mono" placeholder="Raw command, e.g. 44fb" spellcheck="false" autocapitalize="off">
+          <button id="rawBtn" class="btn">Send</button>
+        </div>
+        <pre id="log" class="log mono"></pre>
+        <div class="row">
+          <button id="disconnectBtn" class="btn">Disconnect</button>
+          <button id="forgetBtn" class="btn ghost">Forget this projector</button>
+        </div>
+      </details>
+    </section>
+
+    <!-- Connection settings, reachable from both views -->
+    <details id="settings" class="card advanced">
+      <summary>Connection settings</summary>
+      <p class="sub">Usually not needed. The mesh name is normally the projector's Bluetooth name, and the password is always 123 unless someone changed it.</p>
+      <label class="field">Mesh name<input id="meshName" class="input mono" placeholder="from Bluetooth name" spellcheck="false" autocapitalize="off"></label>
+      <label class="field">Password<input id="password" class="input mono" value="123" spellcheck="false" autocapitalize="off"></label>
+      <label class="field">MAC address<input id="macInput" class="input mono" placeholder="found automatically" spellcheck="false" autocapitalize="off"></label>
+    </details>
+
+    <footer class="foot">
+      Independent, community-made controller. Not affiliated with BlissLights.
+      Works entirely over Bluetooth, and nothing leaves your device.
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
