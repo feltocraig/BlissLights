@@ -247,7 +247,11 @@ async function connect({ showAll = false } = {}) {
     $('settings').open = false;
     await run(refresh);
   } catch (e) {
-    if (e.name === 'NotFoundError') { status.textContent = ''; pill('Not connected', 'idle'); return; } // picker cancelled
+    if (e.name === 'NotFoundError') { // picker cancelled
+      status.textContent = showAll ? '' : 'Projector not in the list? Try "Show all Bluetooth devices" below.';
+      pill('Not connected', 'idle');
+      return;
+    }
     status.textContent = e.message || String(e);
     status.classList.add('error');
     pill('Connection failed', 'error');

@@ -1,5 +1,5 @@
 // Offline cache for the app shell. Bump VERSION whenever files change.
-const VERSION = 'skylite-v2';
+const VERSION = 'skylite-v3';
 const FILES = ['./', 'index.html', 'styles.css', 'manifest.webmanifest', 'icons/icon.svg', 'icons/icon-192.png',
   'js/app.js', 'js/blisslight.js', 'js/telink.js', 'js/aes.js', 'js/platform.js', 'js/macsearch.js', 'js/macsearch.worker.js'];
 
